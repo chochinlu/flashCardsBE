@@ -1,4 +1,5 @@
 import { config } from "https://deno.land/x/dotenv/mod.ts";
+import { validateJwt } from "https://deno.land/x/djwt/validate.ts";
 import {
   makeJwt,
   setExpiration,
@@ -7,6 +8,7 @@ import {
 } from "https://deno.land/x/djwt/create.ts";
 
 const allConfig = config();
+const key: string = allConfig.KEY;
 
 const authedUser = (
   { username, password }: { username: string; password: string },
@@ -15,7 +17,6 @@ const authedUser = (
 };
 
 const genToken = () => {
-  const key: string = allConfig.KEY;
   const payload: Payload = {
     iss: "Park",
     exp: setExpiration(new Date().getTime() + 60000000),
@@ -27,4 +28,16 @@ const genToken = () => {
   return makeJwt({ header, payload, key });
 };
 
-export { authedUser, genToken };
+const authedToken = async (headers: Headers) => {
+  const authorization = headers.get("Authorization");
+  if (!authorization) {
+    return false;
+  }
+  const jwt = authorization.split(" ")[1];
+  if (!jwt) {
+    return false;
+  }
+  return await validateJwt(jwt, key, { isThrowing: false });
+};
+
+export { authedUser, genToken, authedToken };
