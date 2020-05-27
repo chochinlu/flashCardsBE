@@ -1,15 +1,16 @@
+import { authedUser } from "../services/validation.ts";
+
 export default async (
   { request, response }: { request: any; response: any },
 ) => {
   const body = await request.body();
-  const { username, password } = body.value;
-  if (!username || !password) {
+  if (authedUser(body.value)) {
+    response.status = 200;
+    response.body = { result: "authed" };
+  } else {
     response.status = 401;
     response.body = {
-      error: "Need username and password to login",
+      error: "username or password not right",
     };
-  } else {
-    response.status = 200;
-    response.body = { username, password };
   }
 };
