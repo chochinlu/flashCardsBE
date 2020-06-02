@@ -10,22 +10,14 @@ const client = new Client({
   port: parseInt(allConfig.DATABASE_PORT, 10),
 });
 
-const getAllCities = async ({ response }: { response: any }) => {
+const getAllWeather = async ({ response }: { response: any }) => {
   try {
     await client.connect();
     const result = await client.query(
       "SELECT * FROM weather",
     );
 
-    // TODO
-    // interface cityObject {
-    //   id: number;
-    //   name: string;
-    //   is_premium: boolean,
-    //   registration_date: Date
-    // }
-
-    interface cityObject {
+    interface weatherObject {
       city: string,
       temp_lo: number,
       temp_high: number,
@@ -33,7 +25,7 @@ const getAllCities = async ({ response }: { response: any }) => {
       date: Date
     }
 
-    await result.rows.map((row: cityObject) => {
+    await result.rows.map((row: weatherObject) => {
       console.log(JSON.stringify(row, null, 2));
     });
 
@@ -49,4 +41,4 @@ const getAllCities = async ({ response }: { response: any }) => {
   }
 };
 
-export { getAllCities };
+export { getAllWeather };
