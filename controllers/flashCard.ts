@@ -1,21 +1,20 @@
 import client from "../db.ts";
 
-interface weatherObject {
-  city: string;
-  temp_lo: number;
-  temp_high: number;
-  prcp: number;
-  date: Date;
+interface flashCardObject {
+  id: number;
+  frontQuestion: string;
+  backAnswer: string;
+  familiar: boolean;
 }
 
-const getAllWeather = async ({ response }: { response: any }) => {
+const getAllFlashCard = async ({ response }: { response: any }) => {
   try {
     await client.connect();
     const result = await client.query(
-      "SELECT * FROM weather",
+      "SELECT * FROM flash_card",
     );
 
-    await result.rows.map((row: weatherObject) => {
+    await result.rows.map((row: flashCardObject) => {
       console.log(JSON.stringify(row, null, 2));
     });
 
@@ -31,4 +30,4 @@ const getAllWeather = async ({ response }: { response: any }) => {
   }
 };
 
-export { getAllWeather };
+export { getAllFlashCard };
