@@ -1,4 +1,4 @@
-import client from "../db.ts";
+import pool from "../db.ts";
 
 interface flashCardObject {
   id: number;
@@ -8,8 +8,8 @@ interface flashCardObject {
 }
 
 const getAllFlashCard = async ({ response }: { response: any }) => {
+  const client = await pool.connect();
   try {
-    await client.connect();
     const result = await client.query(
       "SELECT * FROM flash_card",
     );
@@ -26,7 +26,7 @@ const getAllFlashCard = async ({ response }: { response: any }) => {
       error: error.toString(),
     };
   } finally {
-    await client.end();
+    client.release();
   }
 };
 
