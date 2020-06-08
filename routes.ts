@@ -3,7 +3,7 @@ import greeting from "./controllers/greeting.ts";
 import login from "./controllers/login.ts";
 import auth from "./controllers/auth.ts";
 import { getAllWeather } from "./controllers/weather.ts";
-import { getAllFlashCard } from "./controllers/flashCard.ts";
+import { getAllFlashCard, addFlashCard } from "./controllers/flashCard.ts";
 
 const router = new Router();
 router
@@ -11,6 +11,7 @@ router
   .get("/auth_greeting", auth, greeting)
   .post("/login", login)
   .get("/weather", getAllWeather)
-  .get("/flash_card", getAllFlashCard);
+  .get("/flash_card", getAllFlashCard)
+  .post("/flash_card", addFlashCard);
 
 export default router;
