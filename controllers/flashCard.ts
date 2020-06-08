@@ -57,8 +57,48 @@ const addFlashCard = async (
   }
 };
 
-// TODO: update
+const updateFlashCard = async (
+  { request, response }: { request: any; response: any },
+) => {
+  const client = await pool.connect();
+  try {
+    const body = await request.body();
+    const {
+      id,
+      front_question = undefined,
+      back_answer = undefined,
+      familiar = undefined,
+    } = body.value;
+    console.log(JSON.stringify({
+      id,
+      front_question,
+      back_answer,
+      familiar,
+    }));
+
+    let queryStr = "UPDATE flash_card SET ";
+
+    const querySet: any = { front_question, back_answer, familiar };
+    queryStr += Object.keys(querySet)
+      .filter((key) => querySet[key])
+      .map((key) => `${key}='${querySet[key]}'`)
+      .join(", ");
+
+    queryStr += ` WHERE id=${id}`;
+    const result = await client.query(queryStr);
+
+    response.status = 200;
+    response.body = { ok: "ok" };
+  } catch (error) {
+    response.status = 500;
+    response.body = {
+      error: error.toString(),
+    };
+  } finally {
+    client.release();
+  }
+};
 
 // TODO: delete
 
-export { getAllFlashCard, addFlashCard };
+export { getAllFlashCard, addFlashCard, updateFlashCard };
