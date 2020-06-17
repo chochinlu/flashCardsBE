@@ -7,6 +7,7 @@ import {
   getAllFlashCard,
   addFlashCard,
   updateFlashCard,
+  deleteFlashCard,
 } from "./controllers/flashCard.ts";
 
 const router = new Router();
@@ -17,6 +18,7 @@ router
   .get("/weather", getAllWeather)
   .get("/flash_card", getAllFlashCard)
   .post("/flash_card", addFlashCard)
-  .put("/flash_card", updateFlashCard);
+  .put("/flash_card", updateFlashCard)
+  .delete("/flash_card", deleteFlashCard);
 
 export default router;

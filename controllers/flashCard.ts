@@ -99,6 +99,28 @@ const updateFlashCard = async (
   }
 };
 
-// TODO: delete
+const deleteFlashCard = async (
+  { request, response }: { request: any; response: any },
+) => {
+  const client = await pool.connect();
+  try {
+    const body = await request.body();
+    const { id } = body.value;
+    const queryStr = `DELETE FROM flash_card WHERE id=${id}`;
+    const result = await client.query(queryStr);
+    // console.log(result);
+    response.status = 200;
+    response.body = { ok: "ok" };
+  } catch (error) {
+    response.status = 500;
+    response.body = {
+      error: error.toString(),
+    };
+  } finally {
+    client.release();
+  }
+};
 
-export { getAllFlashCard, addFlashCard, updateFlashCard };
+// TODO: get one flash card
+
+export { getAllFlashCard, addFlashCard, updateFlashCard, deleteFlashCard };
