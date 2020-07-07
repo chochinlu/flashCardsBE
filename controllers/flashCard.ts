@@ -14,12 +14,20 @@ const getAllFlashCard = async ({ response }: { response: any }) => {
       "SELECT * FROM flash_card",
     );
 
-    await result.rows.map((row: flashCardObject) => {
-      console.log(JSON.stringify(row, null, 2));
-    });
+    const resultArray: any[] = []
+
+    result.rows.map(card => {
+      const obj:any = {}    
+
+      result.rowDescription.columns.map((el, index) => {
+        obj[el.name] = card[index]
+      })
+
+      resultArray.push(obj)
+    })
 
     response.status = 200;
-    response.body = { ok: result.rows };
+    response.body = { ok: resultArray };
   } catch (error) {
     response.status = 500;
     response.body = {
